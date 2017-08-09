@@ -36,15 +36,6 @@ process_expfactory_survey <- function(path, survey) {
   }
 }
 
-#' Process experiment factory surveys.
-#' @param s list of survey names
-#' @param base_path path to search
-#' @export
-#' @return Data frame
-process_surveys <- function(s, base_path) {
-  ldply(base_path, process_expfactory_survey, s)
-}
-
 #' Process expfactory survey data
 #'
 #' @param base_path data path

@@ -4,12 +4,12 @@
 \alias{process_expfactory_survey}
 \title{Process expfactory survey data}
 \usage{
-process_expfactory_survey(p, survey)
+process_expfactory_survey(path, survey)
 }
 \arguments{
-\item{p}{Participant Number}
-
 \item{survey}{Survey name}
+
+\item{p}{Participant Number}
 }
 \value{
 Data frame (long format)
