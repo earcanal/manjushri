@@ -19,7 +19,7 @@ library(stringr)
 #' @return Data frame (long format)
 #' # http://expfactory.readthedocs.io/en/latest/development.html#contributing-to-surveys
 process_expfactory_survey <- function(path, survey) {
-  p <- gsub(".*/(\\d+)$", '\\1', path)
+  p <- as.integer(gsub(".*/(\\d+)$", '\\1', path))
   f <- paste(path, "/", p, "_", survey, ".json", sep = "")
   if ( file.exists(f) ) {
     df <- jsonlite::read_json(f, simplifyVector = TRUE)
