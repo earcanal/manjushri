@@ -2,6 +2,29 @@ library(jsonlite)
 library(tidyverse)
 library(stringr)
 
+#' Process expfactory Attention Network Test
+#' 
+#' @param path Path to ANT data folder
+#' @param time Time-point at which participant completed ANT
+#' @keywords expfactory ANT
+#' @export
+#' @return Data frame
+
+process_ant <- function(path, time) {
+  p        <- as.integer(gsub(".*/(\\d+)$", '\\1', path))
+  ant_file <- paste(path,'/',p,'_ant',time,'.csv',sep='')
+  if(!file.exists(ant_file)){
+    return(data_frame(p=p,t=time, file=ant_file))
+  }
+  ant <- read.csv(ant_file, header = TRUE)
+  ant %>% filter(exp_stage == 'test') %>%
+    filter(trial_type == 'poldrack-single-stim') %>%
+    filter(! is.na(correct_response)) %>%
+    select(-feedback_duration,-trial_id,-trial_index,-internal_node_id,-text,-timing_post_trial,-view_history,-stimulus,-trial_type,-time_elapsed) %>%
+    mutate(p = as.numeric(p)) %>% 
+    mutate(file=ant_file, t=time)
+}
+
 ## To compare speed of different solutions
 # mb <- microbenchmark::microbenchmark(
 #   ldply(surveys, process_surveys),
