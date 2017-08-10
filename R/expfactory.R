@@ -4,15 +4,14 @@ library(stringr)
 
 #' Process expfactory Attention Network Test
 #' 
-#' @param path Path to ANT data folder
+#' @param ant_file Path to ANT file
+#' @param p Participant number
 #' @param time Time-point at which participant completed ANT
 #' @keywords expfactory ANT
 #' @export
 #' @return Data frame
 
-process_ant <- function(path, time) {
-  p        <- as.integer(gsub(".*/(\\d+)$", '\\1', path))
-  ant_file <- paste(path,'/',p,'_ant',time,'.csv',sep='')
+process_ant <- function(ant_file, p, time) {
   if(!file.exists(ant_file)){
     return(data_frame(p=p,t=time, file=ant_file))
   }
