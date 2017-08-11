@@ -20,7 +20,8 @@ process_ant <- function(ant_file, p, time) {
     filter(trial_type == 'poldrack-single-stim') %>%
     filter(! is.na(correct_response)) %>%
     select(-feedback_duration,-trial_id,-trial_index,-internal_node_id,-text,-timing_post_trial,-view_history,-stimulus,-trial_type,-time_elapsed) %>%
-    mutate(p = as.numeric(p)) %>% 
+    mutate(p = as.numeric(p)) %>%
+    mutate(subject = as.factor(subject)) %>%
     mutate(file=ant_file, t=time)
 }
 
