@@ -9,12 +9,12 @@
 #' breath_counting_accuracy(/path/to/file.txt)
 process_eprime_file <- function(path) {
   lines  <- rprime::read_eprime(path)
-  frames <- FrameList(lines)
+  frames <- rprime::FrameList(lines)
   frame1 <- frames[[1]]
 
   # trials occur at level 3
-  frames     <- keep_levels(frames, 3)
-  df         <- to_data_frame(frames)
+  frames     <- rprime::keep_levels(frames, 3)
+  df         <- rprime::to_data_frame(frames)
   to_pick    <- c("Sample", "Wait4TUTSlide.RESP", "Wait4TUTSlide.RT")
   df         <- df[to_pick]
   df$subject <- frame1$Subject
