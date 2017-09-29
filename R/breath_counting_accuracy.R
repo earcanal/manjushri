@@ -1,3 +1,23 @@
+
+#' Convert ePrime breath counting data to CSV
+#'
+#' Convert ePrime breath counting data to CSV
+#' @param path Path to ePrime data files
+#' @export
+#' @example
+#' eprime_breath_counting_to_csv(/path/to/*.txt)
+eprime_breath_counting_to_csv <- function(path) {
+  paths  <-
+    list.files(path,
+               pattern = ".txt",
+               full.names = TRUE,
+               recursive = TRUE)
+  results <- ldply(paths, process_eprime_file) %>%
+    dplyr::rename(response = Wait4TUTSlide.RESP) %>%
+    dplyr::rename(rt = Wait4TUTSlide.RT)
+  write.table(results, paste(path, '/bc.csv', sep=''), sep = ",", row.names = FALSE)
+}
+
 #' Process ePrime Breath Counting Data File
 #'
 #' Process ePrime breath counting data file
