@@ -14,6 +14,6 @@ Process ePrime breath counting data file
 (Levinson, Stoll, Kindy, Merry, & Davidson, 2014)
 }
 \examples{
-breath_counting_accuracy(/path/to/file.txt)
+process_eprime_file(/path/to/file.txt)
 }
 \keyword{ePrime}
