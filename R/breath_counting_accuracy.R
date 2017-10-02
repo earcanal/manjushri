@@ -1,3 +1,22 @@
+#' Summarise breath counting accuracy
+#'
+#' Summarise breath counting accuracy
+#' @param df Data frame returned by breath_counting_accuracy()
+#' @export
+#' @return data.frame
+#' @examples
+#' summarise_breath_counting_accuracy(df)
+summarise_breath_counting_accuracy <- function(df) {
+  bc_accuracy <- df %>%
+    select(subject) %>%
+    unique() %>%
+    dplyr::rename(participant = subject) %>%
+    mutate(total=0,correct=0,incorrect=0)
+  expand.grid(p=bc_accuracy$participant) %>%
+    rowwise() %>%
+    do(., breath_counting_accuracy(.$p, df)) %>%
+    arrange(p)
+}
 
 #' Convert ePrime breath counting data to CSV
 #'
