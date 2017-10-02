@@ -4,7 +4,7 @@
 #' Convert ePrime breath counting data to CSV
 #' @param path Path to ePrime data files
 #' @export
-#' @example
+#' @examples
 #' eprime_breath_counting_to_csv(/path/to/*.txt)
 eprime_breath_counting_to_csv <- function(path) {
   paths  <-
@@ -14,7 +14,11 @@ eprime_breath_counting_to_csv <- function(path) {
                recursive = TRUE)
   results <- ldply(paths, process_eprime_file) %>%
     dplyr::rename(response = Wait4TUTSlide.RESP) %>%
-    dplyr::rename(rt = Wait4TUTSlide.RT)
+    dplyr::rename(rt = Wait4TUTSlide.RT) %>%
+    # Add initial {DOWNARROW} to correct for a known issue in the ePrime script provided by Daniel Levinson,
+    # which doesn't record the first keypress (I think) on the first trial.  Bug requires a bit more testing
+    # to confirm it's the _initial_ keypress which is lost, but it definitely omits 1 {DOWNARROW} keypress.
+    add_row(.before = 1, Sample = 0, response = '{DOWNARROW}', rt = 0, subject = .$subject[1])
   write.table(results, paste(path, '/bc.csv', sep=''), sep = ",", row.names = FALSE)
 }
 
@@ -26,7 +30,7 @@ eprime_breath_counting_to_csv <- function(path) {
 #' @keywords ePrime
 #' @export
 #' @examples
-#' breath_counting_accuracy(/path/to/file.txt)
+#' process_eprime_file(/path/to/file.txt)
 process_eprime_file <- function(path) {
   lines  <- rprime::read_eprime(path)
   frames <- rprime::FrameList(lines)
@@ -46,13 +50,14 @@ process_eprime_file <- function(path) {
 #' Process ePrime breath counting data
 #' (Levinson, Stoll, Kindy, Merry, & Davidson, 2014)
 #' @param p Participant number
+#' @param bc_df Breath counting data frame
 #' @keywords breath counting meditation
 #' @export
 #' @examples
 #' breath_counting_accuracy(1)
 
-breath_counting_accuracy <- function(p) {
-  df        <- filter(bc, subject == p)
+breath_counting_accuracy <- function(p, bc_df) {
+  df        <- filter(bc_df, subject == p)
   resp      <- 1
   row       <- 1
   total     <- 0
