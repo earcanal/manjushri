@@ -94,22 +94,29 @@ breath_counting_accuracy <- function(p, bc_df) {
       } else {
         # shouldn't get here
       }
-    } else { # 9th response
-      total <- total + 1
-      if (df[row,'response'] == '{RIGHTARROW}') { # correct
-        correct <- correct + 1
+    } else { # response >= 9
+      # We only record complete 9 counts (i.e. any final partial count isn't included)
+      if (df[row,'response'] == '{RIGHTARROW}') {
+        if (resp == 9 ) { # correct!
+          correct <- correct + 1
+        }
+        # -> signals end of the count set, regardless of whether it was on breath 9 or later
+        total <- total + 1
+        resp  <- 1
       } else if (df[row,'response'] == '{DOWNARROW}') {
-        incorrect <- incorrect + 1
+        if (resp == 9 ) { # incorrect
+          incorrect <- incorrect + 1
+        }
+        # keep counting responses until the next {RIGHTARROW} ends the count set
+        resp <- resp + 1
       } else {
         # shouldn't get here
       }
-      resp <- 1 # reset count
     }
     row <- row + 1
     if (row > nrow(df)) {
       break
     }
   }
-  # FIXME: ignore final partial count?
   data.frame(p,total,correct,incorrect)
 }
