@@ -111,5 +111,5 @@ breath_counting_accuracy <- function(p, bc_df) {
     }
   }
   # FIXME: ignore final partial count?
-  data.frame(p,total,correct,incorrect,accuracy=(1-signif(incorrect/total, 2))*100)
+  data.frame(p,total,correct,incorrect)
 }
