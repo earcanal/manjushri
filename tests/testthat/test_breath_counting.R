@@ -25,4 +25,6 @@ test_that("breath_counting_accuracy() returns a data frame via do()", {
   expect_is(bc_accuracy, "data.frame")
 })
 
-
+test_that("summarise_breath_counting_accuracy() returns a data frame", {
+  expect_is(summarise_breath_counting_accuracy(bc_df, data.frame(p = 1:20)), 'data.frame')
+})

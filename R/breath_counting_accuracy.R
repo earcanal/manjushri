@@ -1,20 +1,21 @@
 #' Summarise breath counting accuracy
 #'
 #' Summarise breath counting accuracy
-#' @param df Data frame returned by breath_counting_accuracy()
+#' @param data data.frame returned by breath_counting_accuracy()
+#' @param participants data.frame with column 'p' listing participants to process
 #' @export
 #' @return data.frame
 #' @examples
-#' summarise_breath_counting_accuracy(df)
-summarise_breath_counting_accuracy <- function(df) {
-  bc_accuracy <- df %>%
+#' summarise_breath_counting_accuracy(bc_t2, control_list$participants %>% filter(p != 2))
+summarise_breath_counting_accuracy <- function(data, participants) {
+  bc_accuracy <- data %>%
     select(subject) %>%
     unique() %>%
     dplyr::rename(participant = subject) %>%
     mutate(total=0,correct=0,incorrect=0)
-  expand.grid(p=bc_accuracy$participant) %>%
+  expand.grid(p=participants$p) %>%
     rowwise() %>%
-    do(., breath_counting_accuracy(.$p, df)) %>%
+    do(., breath_counting_accuracy(.$p, data)) %>%
     arrange(p)
 }
 

@@ -4,10 +4,12 @@
 \alias{summarise_breath_counting_accuracy}
 \title{Summarise breath counting accuracy}
 \usage{
-summarise_breath_counting_accuracy(df)
+summarise_breath_counting_accuracy(data, participants)
 }
 \arguments{
-\item{df}{Data frame returned by breath_counting_accuracy()}
+\item{data}{data.frame returned by breath_counting_accuracy()}
+
+\item{participants}{data.frame with column 'p' listing participants to process}
 }
 \value{
 data.frame
@@ -16,5 +18,5 @@ data.frame
 Summarise breath counting accuracy
 }
 \examples{
-summarise_breath_counting_accuracy(df)
+summarise_breath_counting_accuracy(bc_t2, control_list$participants \%>\% filter(p != 2))
 }
