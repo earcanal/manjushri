@@ -10,6 +10,7 @@
 get_participants <- function(df, c) {
   p <-
     df %>%
+    ungroup() %>%
     filter(condition == c) %>%
     select(p) %>%
     unique()
