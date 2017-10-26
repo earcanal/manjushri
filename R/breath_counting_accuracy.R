@@ -19,6 +19,24 @@ summarise_breath_counting_accuracy <- function(data, participants) {
     arrange(p)
 }
 
+#' Convert Experiment Factory breath counting data to CSV
+#'
+#' Convert Experiment Factory breath counting data to CSV
+#' @param path Path to data files
+#' @export
+#' @examples
+#' expfactory_breath_counting_to_csv(/path/to/*.csv)
+expfactory_breath_counting_to_csv <- function(path) {
+  paths  <-
+    list.files(path,
+               pattern = ".*_bc.csv",
+               full.names = TRUE,
+               recursive = TRUE)
+
+  # make a bc.csv consumable by breath_counting_accuracy()
+  # Sample,response,bc,subject
+}
+
 #' Convert ePrime breath counting data to CSV
 #'
 #' Convert ePrime breath counting data to CSV
