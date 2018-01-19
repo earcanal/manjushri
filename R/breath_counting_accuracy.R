@@ -34,7 +34,14 @@ expfactory_breath_counting_to_csv <- function(path) {
                recursive = TRUE)
 
   # make a bc.csv consumable by breath_counting_accuracy()
-  # Sample,response,bc,subject
+  #
+  # trial_index (with some munging) -> Sample
+  # key_press -> response
+  #   40 -> {DOWNARROW}
+  #   39 -> {RIGHTARROW}
+  # rt -> rt
+  # (\d+).*bc.csv -> subject
+  #
 }
 
 #' Convert ePrime breath counting data to CSV
