@@ -1,6 +1,6 @@
 Package: manjushri
 Title: Wisdom Abstracted from PhD Data Analysis
-Version: 0.0.0.9000
+Version: 0.1.0.9000
 Authors@R: person("Paul", "Sharpe", email = "paul@miraclefish.com", role = c("aut", "cre"))
 Description: Towards then end of year 1 I thought "I really should just make an R package with these functions so I don’t have to keep copy/pasting them like a goddamn luddite." 
 Depends: R (>= 3.4.1)
