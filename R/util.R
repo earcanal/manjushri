@@ -17,16 +17,19 @@ get_participants <- function(df, c) {
   list('participants' = p, 'n' = count(p))
 }
 
-#' Summarize data.
-#' Calculates count, mean, standard deviation, standard error of the mean, and confidence interval
+#' Summarize data
+#'
+#' Calculates count, mean, standard deviation, standard error of the mean, and confidence interval.
+#'
+#' See http://www.cookbook-r.com/Manipulating_data/Summarizing_data/
+#'
 #' @export
 #' @param data Data frame
 #' @param measurevar String containing name of a column that contains the variable to be summarized
 #' @param groupvars Vector of strings naming columns that contain grouping variables
 #' @param na.rm Boolean indicating whether to ignore NA's
 #' @param conf.interval Number < 1 indicating percent range of the confidence interval (default=.95)
-#'
-#' See http://www.cookbook-r.com/Manipulating_data/Summarizing_data/
+#' @return Data frame
 #'
 summarySE <- function(data=NULL, measurevar, groupvars=NULL, na.rm=FALSE,
                       conf.interval=.95, .drop=TRUE) {
