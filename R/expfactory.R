@@ -63,6 +63,23 @@ process_ant <- function(ant_file, p, time) {
     mutate(file=ant_file, t=time)
 }
 
+#' Process expfactory experiment JSON data.
+#'
+#' Process expfactory experiment JSON data.
+#' @param path Path to data file
+#' @keywords expfactory
+#' @export
+#' @return Data frame (long format)
+process_expfactory_experiment <- function(path) {
+  if ( file.exists(path) ) {
+    l <- jsonlite::read_json(path, simplifyVector = TRUE)
+    jsonlite::fromJSON(unlist(l[1]))
+  } else {
+    message(f, ': file not found')
+    return(data.frame)
+  }
+}
+
 ## To compare speed of different solutions
 # mb <- microbenchmark::microbenchmark(
 #   ldply(surveys, process_surveys),
