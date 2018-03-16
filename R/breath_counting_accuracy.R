@@ -5,8 +5,6 @@
 #' @param participants data.frame with column 'p' listing participants to process
 #' @export
 #' @return data.frame
-#' @examples
-#' summarise_breath_counting_accuracy(bc_t2, control_list$participants %>% filter(p != 2))
 summarise_breath_counting_accuracy <- function(data, participants) {
   bc_accuracy <- data %>%
     select(subject) %>%
@@ -24,24 +22,30 @@ summarise_breath_counting_accuracy <- function(data, participants) {
 #' Convert Experiment Factory breath counting data to CSV
 #' @param path Path to data files
 #' @export
-#' @examples
-#' expfactory_breath_counting_to_csv(/path/to/*.csv)
-expfactory_breath_counting_to_csv <- function(path) {
-  paths  <-
+expfactory_breath_counting_to_csv <- function(path, t) {
+  # make a bc.csv consumable by breath_counting_accuracy()
+  paths <-
     list.files(path,
                pattern = ".*_bc.csv",
                full.names = TRUE,
                recursive = TRUE)
+  df <- expand.grid(path=paths, time=t, stringsAsFactors = FALSE) %>%
+    rowwise() %>%
+    mutate(p=as.integer(gsub(".*/.*/(\\d+)/.*$", '\\1', path))) %>%
+    # filter Ps who withdrew
+    filter(! p %in% withdrew ) %>%
+    do(., manjushri::process_expfactory_bc_file(.$path, .$p))
+  write.table(df, paste(path, '/bc.csv', sep=''), sep = ",", row.names = FALSE)
+}
 
-  # make a bc.csv consumable by breath_counting_accuracy()
-  #
-  # trial_index (with some munging) -> Sample
-  # key_press -> response
-  #   40 -> {DOWNARROW}
-  #   39 -> {RIGHTARROW}
-  # rt -> rt
-  # (\d+).*bc.csv -> subject
-  #
+process_expfactory_bc_file <- function(bc_file, s) {
+  bc <- read.csv(bc_file, header = TRUE)
+  bc %>% filter(trial_id == 'breath_counting') %>%
+    select(trial_index,rt,key_press) %>%
+    # column headers from original ePrime task
+    rename(Sample = trial_index, response = key_press) %>%
+    mutate(Sample = Sample - 2, response = ifelse(response == 40, '{DOWNARROW}', '{RIGHTARROW}'),
+           subject = s)
 }
 
 #' Convert ePrime breath counting data to CSV
@@ -49,8 +53,6 @@ expfactory_breath_counting_to_csv <- function(path) {
 #' Convert ePrime breath counting data to CSV
 #' @param path Path to ePrime data files
 #' @export
-#' @examples
-#' eprime_breath_counting_to_csv(/path/to/*.txt)
 eprime_breath_counting_to_csv <- function(path) {
   paths  <-
     list.files(path,
@@ -74,8 +76,6 @@ eprime_breath_counting_to_csv <- function(path) {
 #' @param path Path to ePrime data file
 #' @keywords ePrime
 #' @export
-#' @examples
-#' process_eprime_file(/path/to/file.txt)
 process_eprime_file <- function(path) {
   lines  <- rprime::read_eprime(path)
   frames <- rprime::FrameList(lines)
@@ -98,9 +98,6 @@ process_eprime_file <- function(path) {
 #' @param bc_df Breath counting data frame
 #' @keywords breath counting meditation
 #' @export
-#' @examples
-#' breath_counting_accuracy(1)
-
 breath_counting_accuracy <- function(p, bc_df) {
   df        <- filter(bc_df, subject == p)
   resp      <- 1
