@@ -21,8 +21,10 @@ summarise_breath_counting_accuracy <- function(data, participants) {
 #'
 #' Convert Experiment Factory breath counting data to CSV
 #' @param path Path to data files
+#' @param t Time point
+#' @param exclude Participants to exclude
 #' @export
-expfactory_breath_counting_to_csv <- function(path, t) {
+expfactory_breath_counting_to_csv <- function(path, t, exclude) {
   # make a bc.csv consumable by breath_counting_accuracy()
   paths <-
     list.files(path,
@@ -32,12 +34,12 @@ expfactory_breath_counting_to_csv <- function(path, t) {
   df <- expand.grid(path=paths, time=t, stringsAsFactors = FALSE) %>%
     rowwise() %>%
     mutate(p=as.integer(gsub(".*/.*/(\\d+)/.*$", '\\1', path))) %>%
-    # filter Ps who withdrew
-    filter(! p %in% withdrew ) %>%
+    filter(! p %in% exclude ) %>%
     do(., manjushri::process_expfactory_bc_file(.$path, .$p))
   write.table(df, paste(path, '/bc.csv', sep=''), sep = ",", row.names = FALSE)
 }
 
+#' @export
 process_expfactory_bc_file <- function(bc_file, s) {
   bc <- read.csv(bc_file, header = TRUE)
   bc %>% filter(trial_id == 'breath_counting') %>%

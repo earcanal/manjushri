@@ -28,3 +28,7 @@ test_that("breath_counting_accuracy() returns a data frame via do()", {
 test_that("summarise_breath_counting_accuracy() returns a data frame", {
   expect_is(summarise_breath_counting_accuracy(bc_df, data.frame(p = 1:20)), 'data.frame')
 })
+
+test_that("expfactory_breath_counting_to_csv() works", {
+  manjushri::expfactory_breath_counting_to_csv('/home/paul/src/study3/data/t1', 1, c(21,26,31,37,42))
+})
