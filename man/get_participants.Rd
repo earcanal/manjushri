@@ -15,8 +15,5 @@ get_participants(df, c)
 list('participants' = p, 'n' = count(p))
 }
 \description{
-Summarise breath counting accuracy
-}
-\examples{
-meditation_list <- get_participants(ant_with_participants_df, 'meditation')
+Get participant information
 }

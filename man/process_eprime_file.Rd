@@ -13,7 +13,4 @@ process_eprime_file(path)
 Process ePrime breath counting data file
 (Levinson, Stoll, Kindy, Merry, & Davidson, 2014)
 }
-\examples{
-process_eprime_file(/path/to/file.txt)
-}
 \keyword{ePrime}

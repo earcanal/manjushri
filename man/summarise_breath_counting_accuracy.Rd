@@ -17,6 +17,3 @@ data.frame
 \description{
 Summarise breath counting accuracy
 }
-\examples{
-summarise_breath_counting_accuracy(bc_t2, control_list$participants \%>\% filter(p != 2))
-}

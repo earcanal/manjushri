@@ -12,6 +12,3 @@ eprime_breath_counting_to_csv(path)
 \description{
 Convert ePrime breath counting data to CSV
 }
-\examples{
-eprime_breath_counting_to_csv(/path/to/*.txt)
-}

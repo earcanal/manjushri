@@ -15,9 +15,6 @@ breath_counting_accuracy(p, bc_df)
 Process ePrime breath counting data
 (Levinson, Stoll, Kindy, Merry, & Davidson, 2014)
 }
-\examples{
-breath_counting_accuracy(1)
-}
 \keyword{breath}
 \keyword{counting}
 \keyword{meditation}

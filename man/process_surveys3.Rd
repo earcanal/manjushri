@@ -15,6 +15,3 @@ data frame with [survey, value, participant, question]
 \description{
 Process expfactory survey data
 }
-\examples{
-process_surveys3(base_path)
-}
