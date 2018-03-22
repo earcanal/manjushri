@@ -37,17 +37,22 @@ plot_by_cue_type <- function(df, c, y) {
 #' @keywords expfactory ANT
 #' @export
 #' @return Data frame
-process_ant <- function(ant_file, p, time) {
+process_ant <- function(ant_file, p, time, json=TRUE) {
   if(!file.exists(ant_file)){
     return(data_frame(p=p,t=time, file=ant_file))
   }
-  ant <- read.csv(ant_file, header = TRUE)
+  if (json) {
+    ant <- process_expfactory_experiment(ant_file)
+  } else {
+    ant <- read.csv(ant_file, header = TRUE)
+  }
   ant %>% filter(exp_stage == 'test') %>%
     filter(trial_type == 'poldrack-single-stim') %>%
     filter(! is.na(correct_response)) %>%
-    select(-feedback_duration,-trial_id,-trial_index,-internal_node_id,-text,-timing_post_trial,-view_history,-stimulus,-trial_type,-time_elapsed) %>%
-    mutate(p = as.numeric(p)) %>%
-    mutate(subject = as.factor(subject)) %>%
+    select(-trial_id,-trial_index,-internal_node_id,-text,-timing_post_trial,-view_history,-stimulus,-trial_type,-time_elapsed) %>%
+    mutate(p = p) %>%
+    # no subject column in expfactory 3.X ant data
+#    mutate(subject = as.factor(subject)) %>%
     mutate(file=ant_file, t=time)
 }
 
@@ -65,7 +70,7 @@ process_expfactory_experiment <- function(path) {
     l <- jsonlite::read_json(path, simplifyVector = TRUE)
     jsonlite::fromJSON(unlist(l[1]))
   } else {
-    message(f, ': file not found')
+    message(path, ': file not found')
     return(data.frame)
   }
 }
