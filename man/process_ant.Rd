@@ -4,7 +4,7 @@
 \alias{process_ant}
 \title{Process expfactory Attention Network Test data file}
 \usage{
-process_ant(ant_file, p, time)
+process_ant(ant_file, p, time, json = TRUE)
 }
 \arguments{
 \item{ant_file}{Path to ANT file}

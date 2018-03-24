@@ -9,12 +9,25 @@ test_that("process_ant() can process JSON", {
 test_that("process_ant() returns correct p column value", {
   expect_equal(df[1,'p'], token)
 })
-df <- process_new_expfactory_survey(token='1', survey='../fixtures/sms.json')
+
+# SMS
+df <- process_new_expfactory_survey(token='1', survey='../fixtures/sms.json') %>%
+  mutate(p = 1)
 test_that("process_new_expfactory_survey() returns a data frame", {
    expect_is(df, 'data.frame')
 })
 test_that('SMS structured JSON correctly parsed', {
   expect_equal(df[1,4], 'I was aware of different emotions that arose in me')
+})
+df <- state_mindfulness_scale(df)
+test_that('SMS total value', {
+  expect_equal(df[1,'sms_total'], 92)
+})
+test_that('SMS mind value', {
+  expect_equal(df[1,'sms_mind'], 68)
+})
+test_that('SMS body value', {
+  expect_equal(df[1,'sms_body'], 24)
 })
 
 df <- process_new_expfactory_survey(token='1', survey='../fixtures/sms-flat.json', flat=TRUE)
