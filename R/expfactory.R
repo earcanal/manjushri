@@ -34,6 +34,7 @@ plot_by_cue_type <- function(df, c, y) {
 #' @param ant_file Path to ANT file
 #' @param p Participant number
 #' @param time Time-point at which participant completed ANT
+#' @param json=TRUE Boolean indicating whether ANT data format is JSON (TRUE) or CSV (FALSE)
 #' @keywords expfactory ANT
 #' @export
 #' @return Data frame

@@ -12,6 +12,8 @@ process_ant(ant_file, p, time, json = TRUE)
 \item{p}{Participant number}
 
 \item{time}{Time-point at which participant completed ANT}
+
+\item{json=TRUE}{Boolean indicating whether ANT data format is JSON (TRUE) or CSV (FALSE)}
 }
 \value{
 Data frame
