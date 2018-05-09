@@ -45,7 +45,7 @@ process_expfactory_bc_file <- function(bc_file, s) {
   bc %>% filter(trial_id == 'breath_counting') %>%
     select(trial_index,rt,key_press) %>%
     # column headers from original ePrime task
-    rename(Sample = trial_index, response = key_press) %>%
+    dplyr::rename(Sample = trial_index, response = key_press) %>%
     mutate(Sample = Sample - 2, response = ifelse(response == 40, '{DOWNARROW}', '{RIGHTARROW}'),
            subject = s)
 }
