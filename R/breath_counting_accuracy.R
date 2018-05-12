@@ -56,19 +56,11 @@ process_expfactory_bc_file <- function(bc_file, s) {
 #' @param path Path to ePrime data files
 #' @export
 eprime_breath_counting_to_csv <- function(path) {
-  paths  <-
-    list.files(path,
-               pattern = ".txt",
-               full.names = TRUE,
-               recursive = TRUE)
-  results <- ldply(paths, process_eprime_file) %>%
-    dplyr::rename(response = Wait4TUTSlide.RESP) %>%
-    dplyr::rename(rt = Wait4TUTSlide.RT) %>%
-    # Add initial {DOWNARROW} to correct for a known issue in the ePrime script provided by Daniel Levinson,
-    # which doesn't record the first keypress (I think) on the first trial.  Bug requires a bit more testing
-    # to confirm it's the _initial_ keypress which is lost, but it definitely omits 1 {DOWNARROW} keypress.
-    add_row(.before = 1, Sample = 0, response = '{DOWNARROW}', rt = 0, subject = .$subject[1])
-  write.table(results, paste(path, '/bc.csv', sep=''), sep = ",", row.names = FALSE)
+  paths <- list.files(path, pattern = ".txt", full.names = TRUE, recursive = TRUE)
+  df <- expand.grid(path=paths, stringsAsFactors=FALSE) %>%
+    rowwise() %>%
+    do(., manjushri::process_eprime_file(.$path))
+  write.table(df, paste(path, '/bc.csv', sep=''), sep = ",", row.names = FALSE)
 }
 
 #' Process ePrime Breath Counting Data File
@@ -89,6 +81,11 @@ process_eprime_file <- function(path) {
   to_pick    <- c("Sample", "Wait4TUTSlide.RESP", "Wait4TUTSlide.RT")
   df         <- df[to_pick]
   df$subject <- frame1$Subject
+  df <- dplyr::rename(df, response = Wait4TUTSlide.RESP, rt = Wait4TUTSlide.RT)
+  # Add initial {DOWNARROW} to correct for a known issue in the ePrime script provided by Daniel Levinson,
+  # which doesn't record the first keypress (I think) on the first trial.  Bug requires a bit more testing
+  # to confirm it's the _initial_ keypress which is lost, but it definitely omits 1 {DOWNARROW} keypress.
+  df <- add_row(df, .before = 1, Sample = 0, response = '{DOWNARROW}', rt = 0, subject = df$subject[1])
   df
 }
 
