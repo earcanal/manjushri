@@ -53,7 +53,7 @@ process_ant <- function(ant_file, p, time, json=TRUE) {
     select(-trial_id,-trial_index,-internal_node_id,-text,-timing_post_trial,-view_history,-stimulus,-trial_type,-time_elapsed) %>%
     mutate(p = p) %>%
     # no subject column in expfactory 3.X ant data
-#    mutate(subject = as.factor(subject)) %>%
+    mutate(subject = as.factor(p)) %>%
     mutate(file=ant_file, t=time)
 }
 
